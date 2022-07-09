@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const catchAsync = require('../utils/catchAsync');
-const User = require('../models/user');
+const catchAsync = require('../utils/CatchAsync');
 const users = require('../controllers/users');
 
 router.route('/register')
