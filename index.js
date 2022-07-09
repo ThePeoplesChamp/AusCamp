@@ -21,7 +21,7 @@ const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 const MongoStore = require('connect-mongo');
 
-const dbUrl = 'mongodb://localhost:27017/aus-camp'
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/aus-camp';
 
 
 mongoose.connect(dbUrl)
@@ -45,11 +45,13 @@ app.use(methodOverride('_method'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(mongoSanitize())
 
+const secret = process.env.SECRET || 'thisshouldbeabettersecret'
+
 const store = MongoStore.create({
     mongoUrl: dbUrl,
     touchAfter: 24 * 60 * 60,
     crypto: {
-        secret: 'thisshouldbeabettersecret'
+        secret: secret
     }
 });
 
@@ -59,7 +61,7 @@ store.on('error', function (e) {
 
 const sessionConfig = {
     name: 'session',
-    secret: 'This shold be a better secret',
+    secret: secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
